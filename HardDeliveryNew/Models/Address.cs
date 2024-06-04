@@ -12,5 +12,6 @@ namespace HardDelivery.Models
 		[Required]
 		public string? StreetN { get; set; }
 
+
 	}
 }

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace HardDelivery.Models
 {
-	public class User
+	public class User : IdentityUser<int>
 	{
 		[Key] 
 		public int Id { get; set; }

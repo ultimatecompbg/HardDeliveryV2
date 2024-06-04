@@ -10,24 +10,11 @@ namespace HardDelivery.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "addresses",
+                name: "AspNetRoles",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    PostCode = table.Column<int>(type: "int", maxLength: 4, nullable: false),
-                    StreetN = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_addresses", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AspNetRoles",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
@@ -41,7 +28,11 @@ namespace HardDelivery.Migrations
                 name: "AspNetUsers",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Role = table.Column<int>(type: "int", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Password = table.Column<int>(type: "int", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -63,27 +54,12 @@ namespace HardDelivery.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "users",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Role = table.Column<int>(type: "int", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Password = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_users", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    RoleId = table.Column<int>(type: "int", nullable: false),
                     ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
@@ -104,7 +80,7 @@ namespace HardDelivery.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false),
                     ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
@@ -123,10 +99,10 @@ namespace HardDelivery.Migrations
                 name: "AspNetUserLogins",
                 columns: table => new
                 {
-                    LoginProvider = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
-                    ProviderKey = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProviderKey = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ProviderDisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    UserId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -143,8 +119,8 @@ namespace HardDelivery.Migrations
                 name: "AspNetUserRoles",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    RoleId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -167,9 +143,9 @@ namespace HardDelivery.Migrations
                 name: "AspNetUserTokens",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    LoginProvider = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
@@ -184,49 +160,42 @@ namespace HardDelivery.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "deliveries",
+                name: "Deliveries",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Status = table.Column<int>(type: "int", nullable: false),
-                    AddressId = table.Column<int>(type: "int", nullable: false),
-                    CourierId = table.Column<int>(type: "int", nullable: false),
                     SenderId = table.Column<int>(type: "int", nullable: false),
                     ReceiverId = table.Column<int>(type: "int", nullable: false),
-                    DeliveryPrice = table.Column<int>(type: "int", nullable: false)
+                    CourierId = table.Column<int>(type: "int", nullable: false),
+                    DeliveryPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_deliveries", x => x.Id);
+                    table.PrimaryKey("PK_Deliveries", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_deliveries_addresses_AddressId",
-                        column: x => x.AddressId,
-                        principalTable: "addresses",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_deliveries_users_CourierId",
+                        name: "FK_Deliveries_AspNetUsers_CourierId",
                         column: x => x.CourierId,
-                        principalTable: "users",
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_deliveries_users_ReceiverId",
+                        name: "FK_Deliveries_AspNetUsers_ReceiverId",
                         column: x => x.ReceiverId,
-                        principalTable: "users",
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_deliveries_users_SenderId",
+                        name: "FK_Deliveries_AspNetUsers_SenderId",
                         column: x => x.SenderId,
-                        principalTable: "users",
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "invoices",
+                name: "Payments",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -237,17 +206,17 @@ namespace HardDelivery.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_invoices", x => x.Id);
+                    table.PrimaryKey("PK_Payments", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_invoices_users_ReceiverId",
+                        name: "FK_Payments_AspNetUsers_ReceiverId",
                         column: x => x.ReceiverId,
-                        principalTable: "users",
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_invoices_users_SenderId",
+                        name: "FK_Payments_AspNetUsers_SenderId",
                         column: x => x.SenderId,
-                        principalTable: "users",
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -292,33 +261,28 @@ namespace HardDelivery.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_deliveries_AddressId",
-                table: "deliveries",
-                column: "AddressId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_deliveries_CourierId",
-                table: "deliveries",
+                name: "IX_Deliveries_CourierId",
+                table: "Deliveries",
                 column: "CourierId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_deliveries_ReceiverId",
-                table: "deliveries",
+                name: "IX_Deliveries_ReceiverId",
+                table: "Deliveries",
                 column: "ReceiverId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_deliveries_SenderId",
-                table: "deliveries",
+                name: "IX_Deliveries_SenderId",
+                table: "Deliveries",
                 column: "SenderId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_invoices_ReceiverId",
-                table: "invoices",
+                name: "IX_Payments_ReceiverId",
+                table: "Payments",
                 column: "ReceiverId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_invoices_SenderId",
-                table: "invoices",
+                name: "IX_Payments_SenderId",
+                table: "Payments",
                 column: "SenderId");
         }
 
@@ -340,22 +304,16 @@ namespace HardDelivery.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "deliveries");
+                name: "Deliveries");
 
             migrationBuilder.DropTable(
-                name: "invoices");
+                name: "Payments");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
-                name: "addresses");
-
-            migrationBuilder.DropTable(
-                name: "users");
         }
     }
 }

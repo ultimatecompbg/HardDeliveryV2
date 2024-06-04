@@ -1,61 +1,58 @@
 ﻿using HardDelivery.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace HardDelivery.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext<User, IdentityRole<int>, int>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
-        {   
-        }
-        public DbSet<Address> addresses { get; set; }
-        public DbSet<Delivery> deliveries { get; set; }
-        public DbSet<User> users { get; set; }
-        public DbSet<Payment> invoices { get; set; }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if (!optionsBuilder.IsConfigured)
-            {
-                optionsBuilder.UseSqlServer(Configuration.ConnectionString);
-            }
-            base.OnConfiguring(optionsBuilder);
         }
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+
+        public DbSet<Delivery> Deliveries { get; set; }
+        public DbSet<Payment> Payments { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder builder)
         {
-            base.OnModelCreating(modelBuilder);
+            base.OnModelCreating(builder);
 
-            modelBuilder.Entity<Delivery>()
-                .HasOne(d => d.Courier)
-                .WithMany(d => d.Delivered)
-                .HasForeignKey(d => d.CourierId)
-                .OnDelete(DeleteBehavior.Restrict);
+            builder.Entity<Delivery>()
+                .Property(d => d.DeliveryPrice)
+                .HasColumnType("decimal(18,2)");
 
-            modelBuilder.Entity<Delivery>()
+            builder.Entity<Delivery>()
                 .HasOne(d => d.Sender)
-                .WithMany(d => d.Sended)
+                .WithMany(u => u.Sended)
                 .HasForeignKey(d => d.SenderId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<Delivery>()
+            builder.Entity<Delivery>()
                 .HasOne(d => d.Receiver)
-                .WithMany(d => d.Received)
-                .HasForeignKey(d => d.ReceiverId)
-                .OnDelete(DeleteBehavior.Restrict);
-            modelBuilder.Entity<Payment>()
-               .HasOne(d => d.Sender)
-               .WithMany(s => s.SentPayments)
-               .HasForeignKey(d => d.SenderId)
-               .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<Payment>()
-                .HasOne(d => d.Receiver)
-                .WithMany(s => s.ReceivedPayments)
+                .WithMany(u => u.Received)
                 .HasForeignKey(d => d.ReceiverId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            builder.Entity<Delivery>()
+                .HasOne(d => d.Courier)
+                .WithMany(u => u.Delivered)
+                .HasForeignKey(d => d.CourierId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Payment>()
+                .HasOne(p => p.Sender)
+                .WithMany(u => u.SentPayments)
+                .HasForeignKey(p => p.SenderId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Payment>()
+                .HasOne(p => p.Receiver)
+                .WithMany(u => u.ReceivedPayments)
+                .HasForeignKey(p => p.ReceiverId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
+
     }
 }
