@@ -10,10 +10,10 @@ namespace HardDelivery.Data
             : base(options)
         {   
         }
-        DbSet<Address> addresses { get; set; }
-        DbSet<Delivery> deliveries { get; set; }
-        DbSet<User> users { get; set; }
-        DbSet<Payment> invoices { get; set; }
+        public DbSet<Address> addresses { get; set; }
+        public DbSet<Delivery> deliveries { get; set; }
+        public DbSet<User> users { get; set; }
+        public DbSet<Payment> invoices { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
