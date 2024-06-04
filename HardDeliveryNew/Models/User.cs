@@ -1,4 +1,4 @@
-﻿using HardDeliveryNew.Models.enums;
+﻿using HardDelivery.Models.enums;
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 

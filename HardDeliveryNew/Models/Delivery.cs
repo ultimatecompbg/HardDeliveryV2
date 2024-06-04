@@ -1,4 +1,5 @@
-﻿using HardDeliveryNew.Models.enums;
+﻿using HardDelivery.Model.enums;
+using HardDelivery.Models.enums;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
