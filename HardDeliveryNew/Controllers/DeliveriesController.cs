@@ -6,8 +6,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using System.Linq;
 using System.Threading.Tasks;
-using HardDelivery.Model.enums;
+using HardDelivery.Models.enums;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using HardDelivery.Model.enums;
 
 namespace HardDelivery.Controllers
 {
