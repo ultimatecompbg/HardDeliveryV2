@@ -1,4 +1,4 @@
-namespace HardDeliveryNew.Models
+namespace HardDelivery.Models
 {
 	public class ErrorViewModel
 	{

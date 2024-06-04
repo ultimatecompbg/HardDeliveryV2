@@ -1,4 +1,4 @@
-﻿namespace HardDeliveryNew.Data
+﻿namespace HardDelivery.Data
 {
     public class Configuration
     {

@@ -1,8 +1,8 @@
-﻿using HardDeliveryNew.Models;
+﻿using HardDelivery.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
-namespace HardDeliveryNew.Controllers
+namespace HardDelivery.Controllers
 {
     public class HomeController : Controller
     {

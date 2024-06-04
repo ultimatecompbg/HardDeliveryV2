@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 
-namespace HardDeliveryNew.Models
+namespace HardDelivery.Models
 {
 	public class User
 	{

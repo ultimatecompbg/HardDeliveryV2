@@ -1,4 +1,4 @@
-﻿namespace HardDeliveryNew.Models.enums
+﻿namespace HardDelivery.Models.enums
 {
 	public enum Role
 	{

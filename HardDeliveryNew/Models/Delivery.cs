@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace HardDeliveryNew.Models
+namespace HardDelivery.Models
 {
 	public class Delivery
 	{

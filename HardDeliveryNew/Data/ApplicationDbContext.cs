@@ -1,8 +1,8 @@
-﻿using HardDeliveryNew.Models;
+﻿using HardDelivery.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace HardDeliveryNew.Data
+namespace HardDelivery.Data
 {
     public class ApplicationDbContext : IdentityDbContext
     {

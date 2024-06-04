@@ -1,4 +1,4 @@
-﻿namespace HardDeliveryNew.Models.enums
+﻿namespace HardDelivery.Model.enums
 {
 	public enum Status
 	{

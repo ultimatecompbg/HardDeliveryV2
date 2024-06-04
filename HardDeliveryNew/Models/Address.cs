@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace HardDeliveryNew.Models
+namespace HardDelivery.Models
 {
 	public class Address
 	{
