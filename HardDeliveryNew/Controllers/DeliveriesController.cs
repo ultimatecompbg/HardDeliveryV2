@@ -45,7 +45,7 @@ namespace HardDelivery.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CourierId,ReceiverId,DeliveryPrice,Address")] Delivery delivery)
+        public async Task<IActionResult> Create([Bind("CourierId,ReceiverId,DeliveryPrice,Address,Weight")] Delivery delivery)
         {
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
@@ -67,7 +67,14 @@ namespace HardDelivery.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-
+            else
+            {
+                var errors = ModelState.Values.SelectMany(v => v.Errors);
+                foreach (var error in errors)
+                {
+                    System.Diagnostics.Debug.WriteLine(error.ErrorMessage);
+                }
+            }
             ViewData["CourierId"] = new SelectList(_context.Users, "Id", "UserName", delivery.CourierId);
             ViewData["ReceiverId"] = new SelectList(_context.Users, "Id", "UserName", delivery.ReceiverId);
             return View(delivery);
