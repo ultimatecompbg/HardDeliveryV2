@@ -7,9 +7,9 @@ namespace HardDelivery.Models
 {
     public class Delivery
     {
+        private double _deliveryPrice;
         [Key]
         public int Id { get; set; }
-
         [Required]
         [ForeignKey(nameof(Sender))]
         public int SenderId { get; set; }
@@ -27,20 +27,24 @@ namespace HardDelivery.Models
         [Required]
         [Range(0, double.MaxValue, ErrorMessage = "Weight must be a positive number")]
         public int Weight { get; set; }
-        public double DeliveryPrice()
+        public double DeliveryPrice
         {
-            if (Weight <= 1)
+            get
             {
-                return 5;
+                if (Weight <= 1)
+                {
+                    return 5;
+                }
+                else if (Weight <= 3)
+                {
+                    return 7;
+                }
+                else
+                {
+                    return 10;
+                }
             }
-            else if (Weight <= 3)
-            {
-                return 7;
-            }
-            else
-            {
-                return 10;
-            }
+            set { _deliveryPrice = value; }
         }
         [Required]
         public Status Status { get; set; }

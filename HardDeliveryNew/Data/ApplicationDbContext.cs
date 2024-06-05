@@ -51,7 +51,7 @@ namespace HardDelivery.Data
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<Delivery>()
-                .Property(d => d.DeliveryPrice())
+                .Property(d => d.DeliveryPrice)
                 .HasColumnType("decimal(18,2)");
         }
     }
