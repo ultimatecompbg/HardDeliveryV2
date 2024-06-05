@@ -1,20 +1,52 @@
-﻿
-
-using HardDelivery.Model.enums;
+﻿using HardDelivery.Model.enums;
+using HardDelivery.Models.enums;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HardDelivery.Models
 {
     public class Delivery
     {
+        [Key]
         public int Id { get; set; }
-        public int CourierId { get; set; }
-        public int ReceiverId { get; set; }
-        public int SenderId { get; set; }
-        public decimal DeliveryPrice { get; set; }
-        public Status Status { get; set; }
-        public User Courier { get; set; }
-        public User Receiver { get; set; }
-        public User Sender { get; set; }
-    }
 
+        [Required]
+        [ForeignKey(nameof(Sender))]
+        public int SenderId { get; set; }
+        public User? Sender { get; set; }
+
+        [Required]
+        [ForeignKey(nameof(Courier))]
+        public int CourierId { get; set; }
+        public User? Courier { get; set; }
+
+        [Required]
+        [ForeignKey(nameof(Receiver))]
+        public int ReceiverId { get; set; }
+        public User? Receiver { get; set; }
+        [Required]
+        [Range(0, double.MaxValue, ErrorMessage = "Weight must be a positive number")]
+        public int Weight { get; set; }
+        public double DeliveryPrice()
+        {
+            if (Weight <= 1)
+            {
+                return 5;
+            }
+            else if (Weight <= 3)
+            {
+                return 7;
+            }
+            else
+            {
+                return 10;
+            }
+        }
+        [Required]
+        public Status Status { get; set; }
+        [Required]
+        public string Address { get; set; }
+    }
 }
+
+        
