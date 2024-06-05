@@ -12,9 +12,6 @@ namespace HardDelivery.Models
         [Required]
         public string Name { get; set; }
 
-        [Required]
-        public string Password { get; set; }
-
         public List<Delivery> Delivered { get; set; } = new List<Delivery>();
         public List<Delivery> Sended { get; set; } = new List<Delivery>();
         public List<Delivery> Received { get; set; } = new List<Delivery>();
