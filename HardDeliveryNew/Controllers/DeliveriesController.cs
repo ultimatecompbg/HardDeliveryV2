@@ -54,7 +54,6 @@ namespace HardDelivery.Controllers
             }
 
             delivery.SenderId = user.Id;
-         
 
             if (ModelState.IsValid)
             {
@@ -79,8 +78,6 @@ namespace HardDelivery.Controllers
             ViewData["ReceiverId"] = new SelectList(_context.Users, "Id", "UserName", delivery.ReceiverId);
             return View(delivery);
         }
-
-
 
         public async Task<IActionResult> Edit(int? id)
         {
@@ -143,5 +140,70 @@ namespace HardDelivery.Controllers
         }
 
         private bool DeliveryExists(int id) => _context.Deliveries.Any(e => e.Id == id);
+
+
+        // Normal Users - Deliveries for receiving or received
+        public async Task<IActionResult> ReceivedDeliveries()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var deliveries = await _context.Deliveries
+                .Where(d => d.ReceiverId == user.Id)
+                .Include(d => d.Courier)
+                .Include(d => d.Receiver)
+                .Include(d => d.Sender)
+                .ToListAsync();
+            return View(deliveries);
+        }
+
+        // Normal Users - Deliveries sent
+        public async Task<IActionResult> SentDeliveries()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var deliveries = await _context.Deliveries
+                .Where(d => d.SenderId == user.Id)
+                .Include(d => d.Courier)
+                .Include(d => d.Receiver)
+                .Include(d => d.Sender)
+                .ToListAsync();
+            return View(deliveries);
+        }
+
+        // Couriers - Available deliveries
+        [Authorize(Roles = "courier")]
+        public async Task<IActionResult> AvailableDeliveries()
+        {
+            var deliveries = await _context.Deliveries
+                .Where(d => d.Status == Status.pending)
+                .Include(d => d.Courier)
+                .Include(d => d.Receiver)
+                .Include(d => d.Sender)
+                .ToListAsync();
+            return View(deliveries);
+        }
+
+        // Couriers - Courier's deliveries
+        [Authorize(Roles = "courier")]
+        public async Task<IActionResult> DeliveredDeliveries()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var deliveries = await _context.Deliveries
+                .Where(d => d.CourierId == user.Id)
+                .Include(d => d.Courier)
+                .Include(d => d.Receiver)
+                .Include(d => d.Sender)
+                .ToListAsync();
+            return View(deliveries);
+        }
+
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> AllDeliveries()
+        {
+            var deliveries = await _context.Deliveries
+                .Include(d => d.Courier)
+                .Include(d => d.Receiver)
+                .Include(d => d.Sender)
+                .ToListAsync();
+            return View(deliveries);
+        }
     }
 }
