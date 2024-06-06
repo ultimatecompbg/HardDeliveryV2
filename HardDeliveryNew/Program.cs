@@ -27,6 +27,8 @@ using (var scope = app.Services.CreateScope())
     var services = scope.ServiceProvider;
     var dbContext = services.GetRequiredService<ApplicationDbContext>();
     dbContext.Database.Migrate();
+    SeedData(services);
+   
 }
 
 if (app.Environment.IsDevelopment())
@@ -53,3 +55,21 @@ app.MapControllerRoute(
 app.MapRazorPages();
 
 app.Run();
+void SeedData(IServiceProvider serviceProvider)
+{
+    var userManager = serviceProvider.GetRequiredService<UserManager<User>>();
+    var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole<int>>>();
+
+    string adminRole = "admin";
+    string courierRole = "courier";
+    // Check if the roles exist, and create them if they don't
+    if (!roleManager.RoleExistsAsync(adminRole).Result)
+    {
+        roleManager.CreateAsync(new IdentityRole<int>(adminRole)).Wait();
+    }
+
+    if (!roleManager.RoleExistsAsync(courierRole).Result)
+    {
+        roleManager.CreateAsync(new IdentityRole<int>(courierRole)).Wait();
+    }
+}

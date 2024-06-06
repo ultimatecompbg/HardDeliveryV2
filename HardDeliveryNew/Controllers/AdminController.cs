@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace HardDelivery.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "admin")]
     public class AdminController : Controller
     {
         private readonly UserManager<User> _userManager;

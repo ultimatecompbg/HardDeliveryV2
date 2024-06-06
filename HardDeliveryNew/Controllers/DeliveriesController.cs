@@ -169,7 +169,7 @@ namespace HardDelivery.Controllers
         }
 
         // Couriers - Available deliveries
-        [Authorize(Roles = "courier")]
+        [Authorize(Roles = "courier,admin")]
         public async Task<IActionResult> AvailableDeliveries()
         {
             var deliveries = await _context.Deliveries
@@ -182,7 +182,7 @@ namespace HardDelivery.Controllers
         }
 
         // Couriers - Courier's deliveries
-        [Authorize(Roles = "courier")]
+        [Authorize(Roles = "courier,admin")]
         public async Task<IActionResult> DeliveredDeliveries()
         {
             var user = await _userManager.GetUserAsync(User);
