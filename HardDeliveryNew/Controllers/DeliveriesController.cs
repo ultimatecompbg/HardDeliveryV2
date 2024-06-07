@@ -228,6 +228,9 @@ namespace HardDelivery.Controllers
             if (delivery == null || delivery.Courier != user)
             {
                 return NotFound();
+            }else if(delivery.Status != Status.delivering)
+            {
+                return BadRequest();
             }
 
             delivery.Status = Status.delivered;
