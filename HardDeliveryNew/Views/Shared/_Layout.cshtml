@@ -22,37 +22,52 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Deliveries" asp-action="Index">Deliveries</a>
+
+                        <!-- Deliveries Dropdown -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="deliveriesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Deliveries
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="deliveriesDropdown">
+                                <li><a class="dropdown-item" asp-area="" asp-controller="Deliveries" asp-action="Index">All Deliveries</a></li>
+                                <li><a class="dropdown-item" asp-area="" asp-controller="Deliveries" asp-action="Create">Create Delivery</a></li>
+                                <li><a class="dropdown-item" asp-area="" asp-controller="Deliveries" asp-action="ReceivedDeliveries">Received Deliveries</a></li>
+                                <li><a class="dropdown-item" asp-area="" asp-controller="Deliveries" asp-action="SentDeliveries">Sent Deliveries</a></li>
+                            </ul>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Deliveries" asp-action="Create">Create Delivery</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Deliveries" asp-action="ReceivedDeliveries">Received Deliveries</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Deliveries" asp-action="SentDeliveries">Sent Deliveries</a>
-                        </li>
+
+                        <!-- Courier Panel Dropdown -->
                         @if (User.IsInRole("courier"))
                         {
-                            <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="Deliveries" asp-action="AvailableDeliveries">Available Deliveries</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="Deliveries" asp-action="DeliveredDeliveries">Delivered Deliveries</a>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="courierDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Courier Panel
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="courierDropdown">
+                                    <li><a class="dropdown-item" asp-area="" asp-controller="Deliveries" asp-action="AvailableDeliveries">Available Deliveries</a></li>
+                                    <li><a class="dropdown-item" asp-area="" asp-controller="Deliveries" asp-action="CourierDeliveries">My Deliveries</a></li>
+                                </ul>
                             </li>
                         }
+
+                        <!-- Admin Panel Dropdown -->
                         @if (User.IsInRole("admin"))
                         {
-                            <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="Deliveries" asp-action="AllDeliveries">All Deliveries</a>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="adminDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Admin Panel
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="adminDropdown">
+                                    <li><a class="dropdown-item" asp-area="" asp-controller="Roles" asp-action="Index">Change Roles</a></li>
+                                    <li><a class="dropdown-item" asp-area="" asp-controller="Deliveries" asp-action="AllDeliveries">Edit Deliveries</a></li>
+                                </ul>
                             </li>
                         }
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>
             </div>
+
         </nav>
     </header>
     <div class="container">

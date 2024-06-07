@@ -221,6 +221,7 @@ namespace HardDelivery.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "courier,admin")]
         public async Task<IActionResult> MarkAsDelivered(int id)
         {
             var user = await _userManager.GetUserAsync(User);
