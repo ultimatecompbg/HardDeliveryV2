@@ -45,7 +45,7 @@ namespace HardDelivery.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CourierId,ReceiverId,DeliveryPrice,Address,Weight")] Delivery delivery)
+        public async Task<IActionResult> Create([Bind("ReceiverId,DeliveryPrice,Address,Weight")] Delivery delivery)
         {
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
@@ -58,7 +58,6 @@ namespace HardDelivery.Controllers
             if (ModelState.IsValid)
             {
                 delivery.Status = Status.pending;
-                delivery.Courier = user;
                 delivery.Receiver = await _context.Users.FindAsync(delivery.ReceiverId);
                 delivery.Sender = user;
 
@@ -173,17 +172,43 @@ namespace HardDelivery.Controllers
         public async Task<IActionResult> AvailableDeliveries()
         {
             var deliveries = await _context.Deliveries
-                .Where(d => d.Status == Status.pending)
+                .Where(d => d.Status == Status.pending && d.CourierId == null)
                 .Include(d => d.Courier)
                 .Include(d => d.Receiver)
                 .Include(d => d.Sender)
                 .ToListAsync();
             return View(deliveries);
         }
+        [HttpPost]
+        [Authorize(Roles = "courier,admin")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> TakeDelivery(int id)
+        {
+            var delivery = await _context.Deliveries.FindAsync(id);
+            if (delivery == null)
+            {
+                return NotFound();
+            }
 
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
+            if (delivery.Status == Status.pending && delivery.CourierId == null)
+            {
+                delivery.CourierId = user.Id;
+                delivery.Status = Status.delivering;
+                _context.Update(delivery);
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction(nameof(AvailableDeliveries));
+        }
         // Couriers - Courier's deliveries
         [Authorize(Roles = "courier,admin")]
-        public async Task<IActionResult> DeliveredDeliveries()
+        public async Task<IActionResult> CourierDeliveries()
         {
             var user = await _userManager.GetUserAsync(User);
             var deliveries = await _context.Deliveries
@@ -193,6 +218,23 @@ namespace HardDelivery.Controllers
                 .Include(d => d.Sender)
                 .ToListAsync();
             return View(deliveries);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> MarkAsDelivered(int id)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var delivery = await _context.Deliveries.FindAsync(id);
+            if (delivery == null || delivery.Courier != user)
+            {
+                return NotFound();
+            }
+
+            delivery.Status = Status.delivered;
+            _context.Update(delivery);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(CourierDeliveries));
         }
 
         [Authorize(Roles = "admin")]

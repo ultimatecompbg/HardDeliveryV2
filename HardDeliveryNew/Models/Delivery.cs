@@ -2,6 +2,7 @@
 using HardDelivery.Models.enums;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 
 namespace HardDelivery.Models
 {
@@ -14,10 +15,8 @@ namespace HardDelivery.Models
         [ForeignKey(nameof(Sender))]
         public int SenderId { get; set; }
         public User? Sender { get; set; }
-
-        [Required]
         [ForeignKey(nameof(Courier))]
-        public int CourierId { get; set; }
+        public int? CourierId { get; set; }
         public User? Courier { get; set; }
 
         [Required]

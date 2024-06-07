@@ -4,6 +4,7 @@ using HardDelivery.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HardDelivery.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240612021807_couriernotrequired")]
+    partial class couriernotrequired
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,7 +36,7 @@ namespace HardDelivery.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("CourierId")
+                    b.Property<int>("CourierId")
                         .HasColumnType("int");
 
                     b.Property<decimal>("DeliveryPrice")
@@ -302,7 +304,8 @@ namespace HardDelivery.Migrations
                     b.HasOne("HardDelivery.Models.User", "Courier")
                         .WithMany("Delivered")
                         .HasForeignKey("CourierId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("HardDelivery.Models.User", "Receiver")
                         .WithMany("Received")

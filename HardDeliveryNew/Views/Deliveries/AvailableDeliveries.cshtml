@@ -9,29 +9,31 @@
 <table class="table">
     <thead>
         <tr>
-            <th>Sender</th>
             <th>Receiver</th>
-            <th>Delivery Price</th>
-            <th>Weight</th>
             <th>Address</th>
-            <th>Status</th>
-            <th>Actions</th>
+            <th>Weight</th>
+            <th>Delivery Price</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
         @foreach (var delivery in Model)
         {
             <tr>
-                <td>@delivery.Sender.UserName</td>
                 <td>@delivery.Receiver.UserName</td>
-                <td>@delivery.DeliveryPrice</td>
-                <td>@delivery.Weight</td>
                 <td>@delivery.Address</td>
-                <td>@delivery.Status</td>
+                <td>@delivery.Weight</td>
+                <td>@delivery.DeliveryPrice</td>
                 <td>
-                    <a asp-action="TakeDelivery" asp-route-id="@delivery.Id">Take Delivery</a>
+                    <form asp-action="TakeDelivery" asp-route-id="@delivery.Id" method="post">
+                        <button type="submit" class="btn btn-primary">Take Delivery</button>
+                    </form>
                 </td>
             </tr>
         }
     </tbody>
 </table>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
