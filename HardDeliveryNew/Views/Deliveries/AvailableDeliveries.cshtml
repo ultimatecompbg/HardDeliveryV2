@@ -1,0 +1,37 @@
+﻿@model IEnumerable<HardDelivery.Models.Delivery>
+
+@{
+    ViewData["Title"] = "Available Deliveries";
+}
+
+<h1>Available Deliveries</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Sender</th>
+            <th>Receiver</th>
+            <th>Delivery Price</th>
+            <th>Weight</th>
+            <th>Address</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var delivery in Model)
+        {
+            <tr>
+                <td>@delivery.Sender.UserName</td>
+                <td>@delivery.Receiver.UserName</td>
+                <td>@delivery.DeliveryPrice</td>
+                <td>@delivery.Weight</td>
+                <td>@delivery.Address</td>
+                <td>@delivery.Status</td>
+                <td>
+                    <a asp-action="TakeDelivery" asp-route-id="@delivery.Id">Take Delivery</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
