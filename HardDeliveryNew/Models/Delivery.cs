@@ -49,6 +49,8 @@ namespace HardDelivery.Models
         public Status Status { get; set; }
         [Required]
         public string Address { get; set; }
+        [Display(Name = "Cash on Delivery")]
+        public decimal PaymentAmount { get; set; } 
     }
 }
 
