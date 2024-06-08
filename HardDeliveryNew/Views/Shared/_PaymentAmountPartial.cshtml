@@ -1,0 +1,7 @@
+﻿@model HardDelivery.Models.Delivery
+
+<div class="form-group">
+    <label asp-for="PaymentAmount" class="control-label">Payment Amount (if cash on delivery)</label>
+    <input asp-for="PaymentAmount" class="form-control" />
+    <span asp-validation-for="PaymentAmount" class="text-danger"></span>
+</div>

@@ -11,6 +11,7 @@ namespace HardDelivery.Models
 
         [Required]
         public string Name { get; set; }
+        public decimal Balance { get; set; }
 
         public List<Delivery> Delivered { get; set; } = new List<Delivery>();
         public List<Delivery> Sended { get; set; } = new List<Delivery>();

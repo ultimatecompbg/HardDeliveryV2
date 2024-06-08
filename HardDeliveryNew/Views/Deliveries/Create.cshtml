@@ -36,6 +36,18 @@
                 <input asp-for="DeliveryPrice" class="form-control" readonly id="DeliveryPriceDisplay" />
                 <input asp-for="DeliveryPrice" type="hidden" id="DeliveryPrice" />
             </div>
+            <div class="form-group">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="cashOnDeliveryCheckbox">
+                    <label class="form-check-label" for="cashOnDeliveryCheckbox">
+                        Cash on Delivery
+                    </label>
+                </div>
+            </div>
+            <!-- Include the payment amount partial inside a container div -->
+            <div id="paymentAmountContainer" style="display: none;">
+                <partial name="_PaymentAmountPartial" />
+            </div>
 
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
@@ -66,6 +78,19 @@
             document.getElementById('DeliveryPriceDisplay').value = deliveryPrice;
             document.getElementById('DeliveryPrice')
             document.getElementById('DeliveryPrice').value = deliveryPrice;
+        });
+        // JavaScript to show/hide the payment amount partial based on checkbox state
+        document.addEventListener('DOMContentLoaded', function () {
+            const cashOnDeliveryCheckbox = document.getElementById('cashOnDeliveryCheckbox');
+            const paymentAmountContainer = document.getElementById('paymentAmountContainer');
+
+            cashOnDeliveryCheckbox.addEventListener('change', function () {
+                if (cashOnDeliveryCheckbox.checked) {
+                    paymentAmountContainer.style.display = 'block';
+                } else {
+                    paymentAmountContainer.style.display = 'none';
+                }
+            });
         });
     </script>
 }

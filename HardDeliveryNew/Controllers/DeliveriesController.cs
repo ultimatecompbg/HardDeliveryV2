@@ -34,7 +34,7 @@ namespace HardDelivery.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ReceiverId,DeliveryPrice,Address,Weight")] Delivery delivery)
+        public async Task<IActionResult> Create([Bind("ReceiverId,DeliveryPrice,Address,PaymentAmount,Weight")] Delivery delivery)
         {
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
@@ -158,16 +158,33 @@ namespace HardDelivery.Controllers
             if (delivery == null || delivery.Courier != user)
             {
                 return NotFound();
-            }else if(delivery.Status != Status.delivering)
+            }
+            else if (delivery.Status != Status.delivering)
             {
                 return BadRequest();
             }
 
             delivery.Status = Status.delivered;
             _context.Update(delivery);
-            await _context.SaveChangesAsync();
 
-            return RedirectToAction(nameof(CourierDeliveries));
+            await _context.SaveChangesAsync();
+            if (delivery.PaymentAmount.HasValue)
+            {
+                var paymentReceiver = await _context.Users.FindAsync(delivery.SenderId);
+                var payment = new Payment
+                {
+                    SenderId = delivery.ReceiverId,
+                    ReceiverId = delivery.SenderId,
+                    Amount = (decimal)delivery.PaymentAmount
+                };
+
+                _context.Payments.Add(payment);
+                paymentReceiver.Balance += payment.Amount;
+                _context.Update(paymentReceiver);
+            }
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(CourierDeliveries), new { area = "Deliveries" });
         }
 
         [Authorize(Roles = "admin")]

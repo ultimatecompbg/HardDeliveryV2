@@ -50,7 +50,7 @@ namespace HardDelivery.Models
         [Required]
         public string Address { get; set; }
         [Display(Name = "Cash on Delivery")]
-        public decimal PaymentAmount { get; set; } 
+        public decimal? PaymentAmount { get; set; } 
     }
 }
 
