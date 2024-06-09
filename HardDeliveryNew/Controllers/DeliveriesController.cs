@@ -64,7 +64,7 @@ namespace HardDelivery.Controllers
             }
             ViewData["CourierId"] = new SelectList(_context.Users, "Id", "UserName", delivery.CourierId);
             ViewData["ReceiverId"] = new SelectList(_context.Users, "Id", "UserName", delivery.ReceiverId);
-            return View(delivery);
+            return RedirectToAction(nameof(SentDeliveries),"Deliveries");
         }
 
         private bool DeliveryExists(int id) => _context.Deliveries.Any(e => e.Id == id);
