@@ -52,7 +52,7 @@ namespace HardDelivery.Controllers
 
                 _context.Add(delivery);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(SentDeliveries));
             }
             else
             {
