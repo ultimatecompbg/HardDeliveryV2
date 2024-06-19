@@ -1,11 +1,15 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using HardDelivery.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace HardDelivery.Services
 {
     public interface IAdminService
     {
+        Task<IEnumerable<User>> GetAllUsersAsync();
         Task<bool> ChangeUserRoleAsync(string userId, string newRole);
     }
 
@@ -16,6 +20,11 @@ namespace HardDelivery.Services
         public AdminService(UserManager<User> userManager)
         {
             _userManager = userManager;
+        }
+
+        public async Task<IEnumerable<User>> GetAllUsersAsync()
+        {
+            return await _userManager.Users.ToListAsync();
         }
 
         public async Task<bool> ChangeUserRoleAsync(string userId, string newRole)

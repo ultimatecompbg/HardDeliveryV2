@@ -1,19 +1,29 @@
 using HardDelivery.Data;
 using HardDelivery.Models;
+using HardDelivery.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
-
+// Configure DbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(Configuration.ConnectionString));
 
-builder.Services.AddIdentity<User, IdentityRole<int>>(options => options.SignIn.RequireConfirmedAccount = false)
-    .AddEntityFrameworkStores<ApplicationDbContext>()
-    .AddDefaultUI() 
-    .AddDefaultTokenProviders();
+// Configure Identity with custom User and Role types
+builder.Services.AddIdentity<User, IdentityRole<int>>(options =>
+{
+    options.SignIn.RequireConfirmedAccount = false;
+})
+.AddEntityFrameworkStores<ApplicationDbContext>()
+.AddDefaultUI()
+.AddDefaultTokenProviders();
+
+// Register DeliveryService as IDeliveryService
+builder.Services.AddScoped<IDeliveryService, DeliveryService>();
+
+// Register AdminService as IAdminService
+builder.Services.AddScoped<IAdminService, AdminService>();
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddControllersWithViews();
@@ -21,19 +31,21 @@ builder.Services.AddRazorPages();
 
 var app = builder.Build();
 
+// Migrate and seed database
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     var dbContext = services.GetRequiredService<ApplicationDbContext>();
     dbContext.Database.Migrate();
-    SeedData(services);
+    SeedData(services).Wait(); // Ensure SeedData method completes before moving on
 }
 
+// Development environment specific configurations
 if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
 }
-else
+else // Production environment configurations
 {
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
@@ -47,28 +59,36 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
+// Map areas, controllers, and Razor pages
+app.MapControllerRoute(
+    name: "areas",
+    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
 app.MapRazorPages();
 
 app.Run();
 
-void SeedData(IServiceProvider serviceProvider)
+// SeedData method to create roles if they do not exist
+async Task SeedData(IServiceProvider serviceProvider)
 {
     var userManager = serviceProvider.GetRequiredService<UserManager<User>>();
     var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole<int>>>();
 
     string adminRole = "admin";
     string courierRole = "courier";
+
     // Check if the roles exist, and create them if they don't
-    if (!roleManager.RoleExistsAsync(adminRole).Result)
+    if (!await roleManager.RoleExistsAsync(adminRole))
     {
-        roleManager.CreateAsync(new IdentityRole<int>(adminRole)).Wait();
+        await roleManager.CreateAsync(new IdentityRole<int>(adminRole));
     }
 
-    if (!roleManager.RoleExistsAsync(courierRole).Result)
+    if (!await roleManager.RoleExistsAsync(courierRole))
     {
-        roleManager.CreateAsync(new IdentityRole<int>(courierRole)).Wait();
+        await roleManager.CreateAsync(new IdentityRole<int>(courierRole));
     }
 }

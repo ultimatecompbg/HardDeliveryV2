@@ -1,0 +1,33 @@
+﻿@model IEnumerable<HardDelivery.Models.Delivery>
+
+@{
+    ViewData["Title"] = "Sent Deliveries";
+}
+
+<h1>Sent Deliveries</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Receiver</th>
+            <th>Courier</th>
+            <th>Delivery Price</th>
+            <th>Weight</th>
+            <th>Address</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var delivery in Model)
+        {
+            <tr>
+                <td>@delivery.Receiver.UserName</td>
+                <td>@delivery.Courier?.UserName</td>
+                <td>@delivery.DeliveryPrice</td>
+                <td>@delivery.Weight</td>
+                <td>@delivery.Address</td>
+                <td>@delivery.Status</td>
+            </tr>
+        }
+    </tbody>
+</table>
